@@ -24,16 +24,16 @@ public abstract class ExtrinsicCall {
      */
     private int callIndex;
 
-    public ExtrinsicCall() {
+    protected ExtrinsicCall() {
     }
 
-    public ExtrinsicCall(int moduleIndex, int callIndex) {
+    protected ExtrinsicCall(int moduleIndex, int callIndex) {
         this();
         this.moduleIndex = moduleIndex;
         this.callIndex = callIndex;
     }
 
-    public ExtrinsicCall(Metadata.Call call) {
+    protected ExtrinsicCall(Metadata.Call call) {
         this();
         init(call);
     }

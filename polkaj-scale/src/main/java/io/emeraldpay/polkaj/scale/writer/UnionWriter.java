@@ -1,13 +1,13 @@
 package io.emeraldpay.polkaj.scale.writer;
 
-import io.emeraldpay.polkaj.scale.ScaleWriter;
-import io.emeraldpay.polkaj.scale.ScaleCodecWriter;
-import io.emeraldpay.polkaj.scale.UnionValue;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.emeraldpay.polkaj.scale.ScaleCodecWriter;
+import io.emeraldpay.polkaj.scale.ScaleWriter;
+import io.emeraldpay.polkaj.scale.UnionValue;
 
 public class UnionWriter<T> implements ScaleWriter<UnionValue<T>> {
 
@@ -30,7 +30,9 @@ public class UnionWriter<T> implements ScaleWriter<UnionValue<T>> {
     public void write(ScaleCodecWriter wrt, UnionValue<T> value) throws IOException {
         wrt.directWrite(value.getIndex());
         T actual = value.getValue();
-        mapping.get(value.getIndex()).write(wrt, actual);
+        if (actual != null) {
+            mapping.get(value.getIndex()).write(wrt, actual);
+        }
     }
 
 }

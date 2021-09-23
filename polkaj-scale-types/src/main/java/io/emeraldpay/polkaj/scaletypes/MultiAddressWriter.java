@@ -1,16 +1,16 @@
 package io.emeraldpay.polkaj.scaletypes;
 
+import java.io.IOException;
+import java.util.Collections;
+
 import io.emeraldpay.polkaj.scale.ScaleCodecWriter;
 import io.emeraldpay.polkaj.scale.ScaleWriter;
 import io.emeraldpay.polkaj.scale.UnionValue;
 import io.emeraldpay.polkaj.scale.writer.UnionWriter;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 public class MultiAddressWriter implements ScaleWriter<UnionValue<MultiAddress>> {
     private static final UnionWriter<MultiAddress> WRITER = new UnionWriter<>(
-        Arrays.asList(
+        Collections.singletonList(
             new AccountIDWriter()
         )
     );
