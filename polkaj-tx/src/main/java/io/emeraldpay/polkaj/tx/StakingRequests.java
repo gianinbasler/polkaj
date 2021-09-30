@@ -12,6 +12,8 @@ import io.emeraldpay.polkaj.scaletypes.staking.StakingNominateTransfer;
 import io.emeraldpay.polkaj.scaletypes.staking.StakingNominateTransferWriter;
 import io.emeraldpay.polkaj.scaletypes.staking.StakingPayoutStakersTransfer;
 import io.emeraldpay.polkaj.scaletypes.staking.StakingPayoutStakersTransferWriter;
+import io.emeraldpay.polkaj.scaletypes.staking.StakingSetControllerTransfer;
+import io.emeraldpay.polkaj.scaletypes.staking.StakingSetControllerTransferWriter;
 import io.emeraldpay.polkaj.scaletypes.staking.StakingUnbondTransfer;
 import io.emeraldpay.polkaj.scaletypes.staking.StakingUnbondTransferWriter;
 import io.emeraldpay.polkaj.scaletypes.staking.StakingWithdrawUnbondedTransfer;
@@ -51,6 +53,10 @@ public class StakingRequests {
 
 	public static PayoutStakersTransferBuilder payoutStakers() {
 		return new PayoutStakersTransferBuilder();
+	}
+
+	public static SetControllerTransferBuilder setController() {
+		return new SetControllerTransferBuilder();
 	}
 
 	public static class BondTransfer extends ExtrinsicRequestBase<StakingBondTransfer> {
@@ -122,6 +128,18 @@ public class StakingRequests {
 		@Override
 		public String toString() {
 			return "PayoutStakersTransfer{" + super.toString() + '}';
+		}
+	}
+
+	public static class SetControllerTransfer extends ExtrinsicRequestBase<StakingSetControllerTransfer> {
+
+		public SetControllerTransfer(Extrinsic<StakingSetControllerTransfer> extrinsic) {
+			super(new StakingSetControllerTransferWriter(), extrinsic);
+		}
+
+		@Override
+		public String toString() {
+			return "SetControllerTransfer{" + super.toString() + '}';
 		}
 	}
 
@@ -285,6 +303,29 @@ public class StakingRequests {
 		public PayoutStakersTransfer build() {
 			Extrinsic<StakingPayoutStakersTransfer> extrinsic = buildExtrinsic();
 			return new StakingRequests.PayoutStakersTransfer(extrinsic);
+		}
+	}
+
+	public static class SetControllerTransferBuilder
+			extends BaseTransferBuilder<SetControllerTransferBuilder, StakingSetControllerTransfer> {
+
+		public SetControllerTransferBuilder() {
+			super(new StakingSetControllerTransfer(), new StakingSetControllerTransferWriter());
+		}
+
+		@Override
+		protected SetControllerTransferBuilder getThis() {
+			return this;
+		}
+
+		public StakingRequests.SetControllerTransferBuilder controller(Address controller) {
+			this.call.setControllerAddress(controller);
+			return this;
+		}
+
+		public SetControllerTransfer build() {
+			Extrinsic<StakingSetControllerTransfer> extrinsic = buildExtrinsic();
+			return new StakingRequests.SetControllerTransfer(extrinsic);
 		}
 	}
 }
