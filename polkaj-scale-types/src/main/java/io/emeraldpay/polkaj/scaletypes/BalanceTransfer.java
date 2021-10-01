@@ -20,6 +20,14 @@ public class BalanceTransfer extends TransferBase {
      */
     private DotAmount balance;
 
+    public BalanceTransfer() {
+        super();
+    }
+
+    public BalanceTransfer(int moduleIndex, int callIndex) {
+        super(moduleIndex, callIndex);
+    }
+
     /**
      * Initialize call index for given call of the Balance module from Runtime Metadata
      *
