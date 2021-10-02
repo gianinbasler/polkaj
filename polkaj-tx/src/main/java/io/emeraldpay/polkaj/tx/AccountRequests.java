@@ -3,6 +3,8 @@ package io.emeraldpay.polkaj.tx;
 import java.nio.ByteBuffer;
 
 import io.emeraldpay.polkaj.scale.ScaleCodecReader;
+import io.emeraldpay.polkaj.scaletypes.AccountBonded;
+import io.emeraldpay.polkaj.scaletypes.AccountBondedReader;
 import io.emeraldpay.polkaj.scaletypes.AccountInfo;
 import io.emeraldpay.polkaj.scaletypes.AccountInfoReader;
 import io.emeraldpay.polkaj.scaletypes.BalanceReader;
@@ -60,6 +62,10 @@ public class AccountRequests {
         return new TransferKeepAliveBuilder();
     }
 
+    public static AddressBonded bonded(Address address) {
+        return new AddressBonded(address);
+    }
+
     public static class TotalIssuance extends StorageRequest<DotAmount> {
 
         @Override
@@ -106,6 +112,37 @@ public class AccountRequests {
                 return null;
             }
             return new ScaleCodecReader(result.getBytes()).read(new AccountInfoReader(address.getNetwork()));
+        }
+    }
+
+    public static class AddressBonded extends StorageRequest<AccountBonded> {
+
+        private final Address address;
+
+        public AddressBonded(Address address) {
+            this.address = address;
+        }
+
+        @Override
+        public ByteData encodeRequest() {
+            String key1 = "System";
+            String key2 = "ExtrinsicCount";
+            int len = 16 + 16 + 16 + 32;
+            ByteBuffer buffer = ByteBuffer.allocate(len);
+            Hashing.xxhash128(buffer, key1);
+            Hashing.xxhash128(buffer, key2);
+            Hashing.blake2128(buffer, address);
+            buffer.put(address.getPubkey());
+            return new ByteData(buffer.flip().array());
+        }
+
+        @Override
+        public AccountBonded apply(ByteData result) {
+            if (result == null) {
+                return null;
+            }
+            byte[] bytes = result.getBytes();
+            return new ScaleCodecReader(bytes).read(new AccountBondedReader(address.getNetwork()));
         }
     }
 
