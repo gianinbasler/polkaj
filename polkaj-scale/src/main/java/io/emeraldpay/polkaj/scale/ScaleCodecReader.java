@@ -11,6 +11,7 @@ import java.util.Optional;
 public class ScaleCodecReader {
 
     public static final UByteReader UBYTE = new UByteReader();
+    public static final UInt8Reader UINT8 = new UInt8Reader();
     public static final UInt16Reader UINT16 = new UInt16Reader();
     public static final UInt32Reader UINT32 = new UInt32Reader();
     public static final UInt128Reader UINT128 = new UInt128Reader();
@@ -86,6 +87,10 @@ public class ScaleCodecReader {
 
     public int readUByte() {
         return UBYTE.read(this);
+    }
+
+    public int readUint8() {
+        return UINT8.read(this);
     }
 
     public int readUint16() {

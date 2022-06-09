@@ -34,7 +34,10 @@ public class RewardDestinationReader implements ScaleReader<UnionValue<RewardDes
 
 		@Override
 		public RewardDestination read(ScaleCodecReader rdr) {
-			return new RewardDestination.TypeID(rdr.readCompactInt());
+			if(!rdr.hasNext()){
+				return new RewardDestination.TypeID(RewardDestination.Type.STAKED.getCode());
+			}
+			return new RewardDestination.TypeID(rdr.readUint8());
 		}
 	}
 
