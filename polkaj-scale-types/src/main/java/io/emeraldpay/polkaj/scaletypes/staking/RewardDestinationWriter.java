@@ -30,7 +30,7 @@ public class RewardDestinationWriter implements ScaleWriter<UnionValue<RewardDes
 		@Override
 		public void write(ScaleCodecWriter wrt, RewardDestination value) throws IOException {
 			RewardDestination.TypeID typeID = (RewardDestination.TypeID) value;
-			wrt.writeCompact(typeID.getTypeValue());
+			wrt.writeUint8(typeID.getTypeValue());
 		}
 	}
 

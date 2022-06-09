@@ -23,7 +23,12 @@ public class StakingBondTransferWriter implements ScaleWriter<StakingBondTransfe
 		wrt.writeByte(value.getCallIndex());
 		wrt.write(addressWriter, value.getControllerAddress());
 		wrt.write(ScaleCodecWriter.COMPACT_BIGINT, value.getAmount().getValue());
-		wrt.write(rewardDestinationWriter, value.getPayee());
+		if (value.getPayee().getIndex() >= 3) {
+			wrt.write(rewardDestinationWriter, value.getPayee());
+		}
+		else {
+			wrt.writeUint8(value.getPayee().getIndex());
+		}
 	}
 
 }

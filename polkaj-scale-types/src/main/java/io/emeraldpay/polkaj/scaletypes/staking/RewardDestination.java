@@ -7,6 +7,8 @@ import io.emeraldpay.polkaj.types.Address;
 
 public interface RewardDestination {
 
+	Type[] ALL = { Type.STAKED, Type.STASH, Type.CONTROLLER, Type.ACCOUNT, Type.NONE };
+
 	enum Type {
 		STAKED(0),
 		STASH(1),
@@ -22,6 +24,15 @@ public interface RewardDestination {
 
 		public int getCode() {
 			return code;
+		}
+
+		public static Type from(int value) {
+			for (Type n : ALL) {
+				if (n.getCode() == value) {
+					return n;
+				}
+			}
+			throw new IllegalArgumentException("Unsupported network: " + value);
 		}
 	}
 
@@ -41,6 +52,10 @@ public interface RewardDestination {
 		private final int typeValue;
 
 		public TypeID(int typeValue) {
+			//values starting from 64 are reserved by the spec at this moment
+			if (typeValue < 0 || typeValue >= 4) {
+				throw new IllegalArgumentException("Unsupported value: " + typeValue);
+			}
 			this.typeValue = typeValue;
 		}
 
@@ -49,7 +64,7 @@ public interface RewardDestination {
 		}
 
 		public static UnionValue<RewardDestination> from(Type payeeType) {
-			return RewardDestination.from(payeeType.getCode(), null);
+			return RewardDestination.from(payeeType.getCode(), new TypeID(payeeType.getCode()));
 		}
 
 		@Override

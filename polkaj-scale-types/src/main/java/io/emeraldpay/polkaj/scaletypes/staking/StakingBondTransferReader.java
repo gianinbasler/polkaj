@@ -2,6 +2,7 @@ package io.emeraldpay.polkaj.scaletypes.staking;
 
 import io.emeraldpay.polkaj.scale.ScaleCodecReader;
 import io.emeraldpay.polkaj.scale.ScaleReader;
+import io.emeraldpay.polkaj.scale.UnionValue;
 import io.emeraldpay.polkaj.scaletypes.MultiAddressReader;
 import io.emeraldpay.polkaj.ss58.SS58Type;
 import io.emeraldpay.polkaj.types.DotAmount;
@@ -27,7 +28,8 @@ public class StakingBondTransferReader implements ScaleReader<StakingBondTransfe
 		result.setCallIndex(rdr.readUByte());
 		result.setControllerAddress(rdr.read(controllerReader));
 		result.setAmount(new DotAmount(rdr.read(ScaleCodecReader.COMPACT_BIGINT), network));
-		result.setPayee(rdr.read(rewardDestinationReader));
+		UnionValue<RewardDestination> test = rdr.read(rewardDestinationReader);
+		result.setPayee(RewardDestination.Type.from(test.getIndex()));
 		return result;
 	}
 
